@@ -2,8 +2,9 @@ package com.example.model
 
 import org.jetbrains.exposed.sql.Table
 
-object RequestStatuses : Table() {
+
+object Directions : Table() {
     val id = integer("id").autoIncrement()
-    val status = varchar("status", 32)
+    val title = varchar("title", 127).uniqueIndex()
     override val primaryKey = PrimaryKey(id)
 }
