@@ -14,8 +14,16 @@ object DatabaseFactory {
         val jdbcURL = "jdbc:h2:file:./build/db"
         val database = Database.connect(jdbcURL, driverClassName)
         transaction {
-            SchemaUtils.drop(Directions, Users, Events, Organizations, Requests, RequestStatuses, Points)
-            SchemaUtils.create(Directions, Users, Events, Organizations, Requests, RequestStatuses, Points)
+            SchemaUtils.drop(Directions, Users, Events, Organizations, Requests, RequestStatuses, Points, Roles)
+            SchemaUtils.create(Directions, Users, Events, Organizations, Requests, RequestStatuses, Points, Roles)
+
+            val userRoleId = Roles.insert {
+                it[role] = "user"
+            } get Roles.id
+
+            val adminRoleId = Roles.insert {
+                it[role] = "admin"
+            } get Roles.id
 
             val directionTitles =
                 listOf("Спортивное", "Патриотическое", "Духовно-нравственное", "Социальное", "Культурное")
@@ -27,7 +35,8 @@ object DatabaseFactory {
                 "Not submitted",
                 "Under review",
                 "Accepted",
-                "Declined"
+                "Declined",
+                "Created"
             )
             val requestStatusesId = RequestStatuses.batchInsert(requestStatuses) {
                 this[RequestStatuses.status] = it
@@ -37,7 +46,21 @@ object DatabaseFactory {
                 it[name] = "Valonter ООО"
             } get Organizations.id
 
+            val adminId = Users.insert {
+                it[roleId] = adminRoleId
+                it[avatarUrl] = "https://cs6.pikabu.ru/avatars/483/v483457.jpg?2118451620"
+                it[name] = "Никита"
+                it[surname] = "Дёмин"
+                it[city] = "Пушкино"
+                it[birthday] = LocalDate.of(2002, 5, 4)
+                it[phone] = "8 962 947 89 60"
+                it[email] = "nejer6@gmail.com"
+                it[password] = "qwerty"
+                it[this.organizationId] = organizationId
+            } get Users.id
+
             val userId = Users.insert {
+                it[roleId] = userRoleId
                 it[avatarUrl] = "https://cs6.pikabu.ru/avatars/663/v663703-279838185.jpg"
                 it[name] = "Татьяна"
                 it[surname] = "Кудрявцева"
@@ -60,6 +83,12 @@ object DatabaseFactory {
                         "городе. \nМероприятие состоится 25.05.23 на стадионе Динамо"
             } get Events.id
 
+            Requests.insert {
+                it[eventId] = notSubmittedEventId
+                it[this.userId] = adminId
+                it[statusId] = requestStatuses.indexOf("Created") + 1
+            }
+
             val previousEventId = Events.insert {
                 it[title] = "Спорт для всех"
                 it[date] = LocalDate.of(2023, 4, 25)
@@ -71,6 +100,12 @@ object DatabaseFactory {
                         "городе. \nМероприятие состоится 25.04.23 на стадионе Динамо"
             } get Events.id
 
+            Requests.insert {
+                it[eventId] = previousEventId
+                it[this.userId] = adminId
+                it[statusId] = requestStatuses.indexOf("Created") + 1
+            }
+
             var requestId = Requests.insert {
                 it[this.userId] = userId
                 it[this.eventId] = previousEventId
@@ -78,7 +113,7 @@ object DatabaseFactory {
             }
 
             Points.insert {
-                it[this.userId] = 1
+                it[this.userId] = userId
                 it[eventId] = previousEventId
                 it[points] = 80
             }
@@ -93,6 +128,12 @@ object DatabaseFactory {
                         " принять участие в организации и проведении спортивных мероприятий в нашем " +
                         "городе. \nМероприятие состоится 25.06.23 на стадионе Динамо"
             } get Events.id
+
+            Requests.insert {
+                it[this.userId] = adminId
+                it[eventId] = event3
+                it[statusId] = requestStatuses.indexOf("Created") + 1
+            }
 
             Requests.insert {
                 it[this.userId] = userId

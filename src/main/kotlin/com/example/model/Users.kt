@@ -14,5 +14,6 @@ object Users : Table() {
     val email = varchar("email", 128).uniqueIndex()
     val password = varchar("password", 128)
     val organizationId = reference("organization_id", Organizations.id)
+    val roleId = reference("role_id", Roles.id)
     override val primaryKey = PrimaryKey(id)
 }

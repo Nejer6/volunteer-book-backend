@@ -7,3 +7,8 @@ fun localDateToString(date: LocalDate): String {
     val formatter = DateTimeFormatter.ofPattern("dd.MM.yy")
     return date.format(formatter)
 }
+
+fun String.toLocalDate(): LocalDate {
+    val formatter = DateTimeFormatter.ofPattern("dd.MM.yy")
+    return LocalDate.parse(this, formatter)
+}

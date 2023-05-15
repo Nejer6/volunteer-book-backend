@@ -1,0 +1,429 @@
+openapi: "3.0.3"
+info:
+  title: "volunteer_book_backend API"
+  description: "volunteer_book_backend API"
+  version: "1.0.0"
+servers:
+- url: "https://volunteer_book_backend"
+paths:
+  /api/check-user:
+    get:
+      description: ""
+      parameters:
+      - name: "email"
+        in: "query"
+        required: false
+        schema:
+          type: "string"
+      - name: "password"
+        in: "query"
+        required: false
+        schema:
+          type: "string"
+      responses:
+        "400":
+          description: "Bad Request"
+          content:
+            '*/*':
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: ""
+                Example#2:
+                  value: ""
+        "404":
+          description: "Not Found"
+          content:
+            '*/*':
+              schema:
+                type: "string"
+  /json/kotlinx-serialization:
+    get:
+      description: ""
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "string"
+  /api/protected/admin/events:
+    get:
+      description: ""
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/EventDTO"
+  /api/protected/admin/events/{id}/edit:
+    get:
+      description: ""
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        schema:
+          type: "integer"
+      responses:
+        "400":
+          description: "Bad Request"
+          content:
+            '*/*':
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: ""
+        "404":
+          description: "Not Found"
+          content:
+            '*/*':
+              schema:
+                type: "string"
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/EventEditDTO"
+        "403":
+          description: "Forbidden"
+          content:
+            '*/*':
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "Events can only be created by admins"
+  /api/protected/admin/events/{id}/edit/requests/{userId}/accept:
+    put:
+      description: ""
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        schema:
+          type: "integer"
+      - name: "userId"
+        in: "path"
+        required: true
+        schema:
+          type: "integer"
+      responses:
+        "400":
+          description: "Bad Request"
+          content:
+            '*/*':
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: ""
+                Example#2:
+                  value: ""
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "object"
+        "403":
+          description: "Forbidden"
+          content:
+            '*/*':
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "Events can only be created by admins"
+  /api/protected/admin/events/{id}/edit/requests/{userId}/decline:
+    put:
+      description: ""
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        schema:
+          type: "integer"
+      - name: "userId"
+        in: "path"
+        required: true
+        schema:
+          type: "integer"
+      responses:
+        "400":
+          description: "Bad Request"
+          content:
+            '*/*':
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: ""
+                Example#2:
+                  value: ""
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "object"
+        "403":
+          description: "Forbidden"
+          content:
+            '*/*':
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "Events can only be created by admins"
+  /api/protected/admin/events/create:
+    post:
+      description: ""
+      requestBody:
+        content:
+          '*/*':
+            schema:
+              $ref: "#/components/schemas/EventCreateDTO"
+        required: true
+      responses:
+        "201":
+          description: "Created"
+          content:
+            '*/*':
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "Event created successfully"
+        "403":
+          description: "Forbidden"
+          content:
+            '*/*':
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "Events can only be created by admins"
+  /api/protected/events:
+    get:
+      description: ""
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/EventDTO"
+  /api/protected/events/{id}:
+    get:
+      description: ""
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        schema:
+          type: "integer"
+      responses:
+        "400":
+          description: "Bad Request"
+          content:
+            '*/*':
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: ""
+        "404":
+          description: "Not Found"
+          content:
+            '*/*':
+              schema:
+                type: "string"
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/EventDetailDTO"
+  /api/protected/events/{id}/send-request:
+    post:
+      description: ""
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        schema:
+          type: "integer"
+      responses:
+        "400":
+          description: "Bad Request"
+          content:
+            '*/*':
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: ""
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "The request has been sent."
+  /api/protected/profile:
+    get:
+      description: ""
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/UserProfileDTO"
+components:
+  schemas:
+    EventDTO:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+          format: "int32"
+        title:
+          type: "string"
+        date:
+          type: "string"
+        direction:
+          type: "string"
+        points:
+          type: "integer"
+          format: "int32"
+    UserDTO:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+          format: "int32"
+        name:
+          type: "string"
+        surname:
+          type: "string"
+    ParticipantDTO:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+          format: "int32"
+        name:
+          type: "string"
+        surname:
+          type: "string"
+        points:
+          type: "integer"
+          format: "int32"
+    EventEditDTO:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+          format: "int32"
+        title:
+          type: "string"
+        date:
+          type: "string"
+        direction:
+          type: "string"
+        address:
+          type: "string"
+        organizer:
+          type: "string"
+        description:
+          type: "string"
+        requests:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/UserDTO"
+        participants:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/ParticipantDTO"
+    EventCreateDTO:
+      type: "object"
+      properties:
+        title:
+          type: "string"
+        date:
+          type: "string"
+        direction:
+          type: "string"
+        address:
+          type: "string"
+        organizer:
+          type: "string"
+        description:
+          type: "string"
+    EventDetailDTO:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+          format: "int32"
+        title:
+          type: "string"
+        date:
+          type: "string"
+        direction:
+          type: "string"
+        address:
+          type: "string"
+        organizer:
+          type: "string"
+        description:
+          type: "string"
+        state:
+          type: "string"
+    UserProfileDTO:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+          format: "int32"
+        role:
+          type: "string"
+        avatarUrl:
+          type: "string"
+        name:
+          type: "string"
+        surname:
+          type: "string"
+        city:
+          type: "string"
+        birthday:
+          type: "string"
+        phone:
+          type: "string"
+        email:
+          type: "string"
+        organization:
+          type: "string"
+        points:
+          type: "integer"
+          format: "int32"
+        currentEvents:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/EventDTO"
+        previousEvents:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/EventDTO"
