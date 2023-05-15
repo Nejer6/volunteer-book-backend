@@ -14,6 +14,16 @@ object DAO {
     private suspend fun <T> dbQuery(block: suspend () -> T): T =
         newSuspendedTransaction(Dispatchers.IO) { block() }
 
+    suspend fun getUserProfileById(userId: Int): UserProfileDTO = dbQuery {
+        val email = Users
+            .select { Users.id.eq(userId) }
+            .map {
+                it[Users.email]
+            }
+            .first()
+        getUserProfileByEmail(email)
+    }
+
     suspend fun checkUser(email: String, password: String): Boolean = dbQuery {
         val user = Users
             .select { Users.email.eq(email) and Users.password.eq(password) }

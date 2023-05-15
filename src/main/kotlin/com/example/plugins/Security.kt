@@ -43,6 +43,23 @@ fun Application.configureSecurity() {
                 }
 
                 route("/admin") {
+                    route("users") {
+                        get("{userId}") {
+                            val principal = call.principal<UserIdPrincipal>()!!
+                            val email = principal.name
+                            val userid = call.parameters["userId"]?.toInt() ?: return@get call.badRequest("userId")
+                            val isAdmin = DAO.isAdmin(email)
+                            if (isAdmin) {
+                                val eventEditDTO =
+                                    DAO.getUserProfileById(userid)
+                                        ?: return@get call.notFound("Event with id $userid not fount")
+                                call.respond(eventEditDTO)
+                            } else {
+                                call.respond(HttpStatusCode.Forbidden, "Events can only be created by admins")
+                            }
+                        }
+                    }
+
                     route("/events") {
                         get {
                             val principal = call.principal<UserIdPrincipal>()!!
