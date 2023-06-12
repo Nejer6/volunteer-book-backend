@@ -11,5 +11,6 @@ data class EventDetailDTO(
     val address: String,
     val organizer: String,
     val description: String,
-    val state: String
+    val state: String,
+    val maxParticipant: Int?
 )

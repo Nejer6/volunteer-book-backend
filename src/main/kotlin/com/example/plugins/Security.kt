@@ -23,14 +23,6 @@ fun Application.configureSecurity() {
                 }
             }
         }
-
-//        form(name = "myauth2") {
-//            userParamName = "user"
-//            passwordParamName = "password"
-//            challenge {
-//                /**/
-//            }
-//        }
     }
     routing {
         authenticate("myauth1") {

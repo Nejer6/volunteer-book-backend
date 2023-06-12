@@ -36,7 +36,8 @@ object DatabaseFactory {
                 "Under review",
                 "Accepted",
                 "Declined",
-                "Created"
+                "Created",
+                "Occupied"
             )
             val requestStatusesId = RequestStatuses.batchInsert(requestStatuses) {
                 this[RequestStatuses.status] = it
@@ -81,6 +82,7 @@ object DatabaseFactory {
                 it[description] = "Наше спортивное волонтерское мероприятие = это отличная возможность" +
                         " принять участие в организации и проведении спортивных мероприятий в нашем " +
                         "городе. \nМероприятие состоится 25.05.23 на стадионе Динамо"
+                it[maxParticipant] = null
             } get Events.id
 
             Requests.insert {
@@ -127,6 +129,7 @@ object DatabaseFactory {
                 it[description] = "Наше спортивное волонтерское мероприятие = это отличная возможность" +
                         " принять участие в организации и проведении спортивных мероприятий в нашем " +
                         "городе. \nМероприятие состоится 25.06.23 на стадионе Динамо"
+                it[maxParticipant] = 100
             } get Events.id
 
             Requests.insert {

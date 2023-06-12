@@ -11,5 +11,6 @@ object Events : Table() {
     val address = varchar("address", 512)
     val organizer = varchar("organizer", 255)
     val description = text("description")
+    val maxParticipant = integer("max_participant").nullable()
     override val primaryKey = PrimaryKey(id)
 }

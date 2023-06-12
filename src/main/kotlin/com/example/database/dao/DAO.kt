@@ -82,6 +82,7 @@ object DAO {
                                 surname = it[Users.surname]
                             )
                         },
+                    maxParticipant = event[Events.maxParticipant],
                     participants = Users
                         .innerJoin(Requests)
                         .innerJoin(RequestStatuses)
@@ -231,9 +232,21 @@ object DAO {
                     address = it[Events.address],
                     organizer = it[Events.organizer],
                     description = it[Events.description],
-                    state = it.getOrNull(RequestStatuses.status) ?: "Not submitted"
+                    state = it.getOrNull(RequestStatuses.status) ?: if ((it[Events.maxParticipant]
+                            ?: Int.MAX_VALUE) > getNumberOfParticipants(eventId)
+                    )  "Not submitted" else "Occupied",
+                    maxParticipant = it[Events.maxParticipant]
                 )
             }.singleOrNull()
+    }
+
+    private suspend fun getNumberOfParticipants(eventId: Int) : Int = dbQuery {
+        return@dbQuery Events
+            .innerJoin(Requests)
+            .innerJoin(RequestStatuses)
+            .select { (RequestStatuses.status eq "Accepted") and (Events.id eq eventId)}
+            .count()
+            .toInt()
     }
 
     suspend fun getUserProfileByEmail(email: String): UserProfileDTO = dbQuery {

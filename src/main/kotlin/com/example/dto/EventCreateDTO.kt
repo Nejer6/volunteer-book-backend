@@ -9,5 +9,6 @@ data class EventCreateDTO(
     val direction: String,
     val address: String,
     val organizer: String,
-    val description: String
+    val description: String,
+    val maxParticipant: Int?
 )

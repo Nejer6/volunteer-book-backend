@@ -12,5 +12,6 @@ data class EventEditDTO(
     val organizer: String,
     val description: String,
     val requests: List<UserDTO>,
-    val participants: List<ParticipantDTO>
+    val participants: List<ParticipantDTO>,
+    val maxParticipant: Int?
 )
