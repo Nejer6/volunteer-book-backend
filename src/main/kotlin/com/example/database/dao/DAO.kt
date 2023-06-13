@@ -124,6 +124,7 @@ object DAO {
             it[address] = eventCreateDTO.address
             it[organizer] = eventCreateDTO.organizer
             it[description] = eventCreateDTO.description
+            it[maxParticipant] = eventCreateDTO.maxParticipant
         } get Events.id
 
         Requests.insert {
